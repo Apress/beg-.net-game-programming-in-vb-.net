@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawTextWorkAround", "DrawTextWorkAround.csproj", "{981C474A-7340-4E9C-8AB2-0DC01B19A634}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{981C474A-7340-4E9C-8AB2-0DC01B19A634}.Debug.ActiveCfg = Debug|.NET
+		{981C474A-7340-4E9C-8AB2-0DC01B19A634}.Debug.Build.0 = Debug|.NET
+		{981C474A-7340-4E9C-8AB2-0DC01B19A634}.Release.ActiveCfg = Release|.NET
+		{981C474A-7340-4E9C-8AB2-0DC01B19A634}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

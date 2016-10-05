@@ -1,0 +1,165 @@
+VB Eratta<br/>
+
+========================================================================<br/>
+
+Chapter 1, Page 7<br/>
+<br/>
+LinGrBrush = New Drawing2D.LinearGradientBrush(...)<br/>
+
+the end of each line is missing the underscore "_" continuation character<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 10<br/>
+<br/>
+If (Dx > (R1.extentX+R2.ExtentX) And (Dy > (R1.ExtentY+R2.ExtentY)) Then ...<br/>
+
+should be<br/>
+
+If (Dx < (R1.extentX+R2.ExtentX) And (Dy < (R1.ExtentY+R2.ExtentY)) Then ...<br/>
+   //overlap<br/>
+Else<br/>
+   //no overlap<br/>
+End If<br/>
+
+========================================================================<br/>
+
+Chapter 1, Page 16<br/>
+<br/>
+Some readers have indicated that the Implementation of CircleIntersect at the bottom of Page 18 is erroneous,<br/> 
+indicating that the call to Math.Sqr (squaring function) should be Math.Sqrt (Square root).  This is not an error.<br/> 
+Kind of.  The error is that we should have used Math.Pow.  Math.Sqr isn't a valid function.  In addition, the <br/>
+return result:<br/>
+  return Radius * Radius < Dist<br/>
+should be<br/>
+  return Dist < Radius * Radius<br/>
+
+In order to simplify understanding this collision test, I've added a class and an Nunit test harness to help.<br/>  
+The class is AxisAlignedBoundingBox and the test is AABBTest.  Please refer to this code instead of the code snippets <br/>
+on page 16.<br/>
+
+========================================================================<br/>
+
+Chapter 1, Page 19<br/>
+<br/>
+Figure 1-17 says<br/>
+
+Dividing a screen into 64 zones<br/>
+ 
+ should say<br/>
+
+Dividing a screen into 256 zones<br/>
+
+========================================================================<br/>
+
+
+
+Chapter 1, Page 22<br/>
+<br/>
+The extension to Arvo's algorithm on this page is incorrect.  Adding a Z axis<br/>
+check to the AxisAlignedBoundingBox and test code (mentioned above) will yield<br/>
+correct results.<br/>
+
+
+========================================================================<br/>
+
+Chapter 1, Page 34<br/>
+<br/>
+Square.Draw(PicBackground.Handle)<br/>
+
+should be<br/>
+
+Square.Show(PicBackground.Handle)<br/>
+
+
+
+========================================================================<br/>
+
+Chapter 1, page 50<br/>
+<br/>
+Private Sub CmdStart_Click event handler must have this value set somewhere<br/>
+in the method:<br/>
+   CmdStart.Enabled = False<br/>
+
+
+========================================================================<br/>
+
+Chapter 6, Pg 292 -<br/>
+<br/>
+Until the December version of the DirectX SDK is released, I needed to create a workaround to a bug I found in <br/>
+the Microsoft.DirectX.Direct3D.Font.DrawText methods.<br/>
+
+The problem is that there are two slightly different methods you can call:<br/>
+
+Public Function DrawText( _<br/>
+    ByVal sprite As Sprite, _<br/>
+    ByVal text As String, _<br/>
+    ByRef rect As Rectangle, _<br/>
+    ByVal format As DrawTextFormat, _<br/>
+    ByVal color As Color _<br/>
+) As Integer<br/>
+
+And <br/>
+
+Public Function DrawText( _<br/>
+    ByVal sprite As Sprite, _<br/>
+    ByVal text As String, _<br/>
+    ByRef rect As Rectangle, _<br/>
+    ByVal format As DrawTextFormat, _<br/>
+    ByVal color As Color _<br/>
+) As Integer<br/>
+
+The only difference is that one uses a ByRef param for Rectangle and the other a ByVal.<br/>
+ 
+But, according to VB, it is an error to have such a thing -- two identically-named methods cannot be overloaded<br/> 
+if they only differ by parameters declared as ByRef and ByVal.  <br/>
+ 
+As a result, I needed to create a C# wrapper library (Apress.GameProgramming.DrawTextWorkAround) that allowed me to<br/> 
+draw the text.<br/>
+
+So, this line:<br/>
+
+DrawingFont.DrawText(Nothing, "X: " + Destination.X.ToString() + " Y: " + Destination.Y.ToString(), _<br/>
+ New Rectangle(5, 5, Me.Width, Me.Height), Direct3D.DrawTextFormat.NoClip, Color.White)<br/>
+
+Is replaced by a reference to the DrawTextWorkAround DLL and this line<br/>
+
+Workaround.DrawText("X: " + Destination.X.ToString() + " Y: " + Destination.Y.ToString())<br/>
+
+Don't forget that the Workaround object must be reinitialised every time InitializeDeviceObjects is called.<br/>
+
+========================================================================<br/>
+
+Chapter 6, pg 297<br/>
+<br/>
+The new SDK simply returns an identical reference to a mesh if you call Mesh.Clean and nothing changes, so these <br/>
+lines of code:<br/>
+
+        TempMesh = Mesh.Clean(CleanType.Optimization, SystemMemoryMesh, AdjacencyBuffer, AdjacencyBuffer, ErrorString)<br/>
+        SystemMemoryMesh.Dispose()<br/>
+        SystemMemoryMesh = TempMesh<br/>
+
+Will yield a nulled SystemMemoryMesh if Mesh.Clean does nothing.  You must explicitly check to verify that the meshes <br/>
+are identical by using the Equals method:<br/>
+
+        TempMesh = Mesh.Clean(CleanType.Optimization, SystemMemoryMesh, AdjacencyBuffer, AdjacencyBuffer, ErrorString)<br/>
+        If Not TempMesh.Equals(SystemMemoryMesh) Then<br/>
+            SystemMemoryMesh.Dispose()<br/>
+            SystemMemoryMesh = TempMesh<br/>
+        End If<br/>
+
+========================================================================<br/>
+
+
+Chapter 6, pg 298<br/>
+<br/>
+The Managed DirectX mesh flag OptimizeAttrSort has been changed to OptimizeAttributeSort to conform to Microsoft<br/> 
+coding standards.<br/>
+
+========================================================================<br/>
+
+Chapter 6/7<br/>
+<br/>
+The shell code for the Spacewar3D game used the PureDevice flag when creating the device caps.  This resulted in very<br/> 
+strange side-effects or non-functional programs.  That flag has been terminated with prejudice.<br/>
